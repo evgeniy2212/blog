@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'ArticlesController@index')->name('main');
+Route::get('post/{id}', 'ArticlesController@showPost')->name('post');
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/comments', 'CommentsController@index')->name('comments');
+Route::post ('storeComment', 'CommentsController@store');
