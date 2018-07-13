@@ -10,8 +10,9 @@ class ArticlesController extends Controller
 {
     public function showPost($id)
     {
-        $post_id = new Articles();
-        $post_id = $post_id->getArticleById($id);
+//        $post_id = new Articles();
+//        $post_id = $post_id->getArticleById($id);
+        $post_id = Articles::where('id', $id)->get();
 //        dd($post_id);
         return view('post', [
             'post_id' => $post_id,
@@ -24,11 +25,7 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $articles = new Articles();
-//        $articles = $articles->getArticles();
         $articles = Articles::paginate(2);
-//        $articles = $articles->getArticleId('1');
-//        dd($articles);
         return view('main',
             [
                 'articles' => $articles,

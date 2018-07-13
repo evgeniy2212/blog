@@ -9,6 +9,14 @@ class Articles extends Model
 {
     protected $table = 'articles';
 
+    public function user(){
+        return $this->belongsTo('App\User');
+    }
+
+    public function comments(){
+        return $this->hasMany('comments');
+    }
+
     public function getArticles(){
         return DB::table('articles')
             ->get();

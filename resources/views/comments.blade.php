@@ -53,20 +53,23 @@
 <!-- Post Content -->
 <article>
     <div class="container">
+        @foreach($comments as $comment)
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-
+                {{ $comment->text }}
+                <hr>
             </div>
         </div>
+        @endforeach
     </div>
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                {{ Form::open(['url' => 'storeComment', 'method' => 'POST', 'class' => 'form-horizontal']) }}
+                {{ Form::open(['action' => 'CommentsController@store', 'method' => 'POST', 'class' => 'form-horizontal', 'before'    => 'csrf']) }}
                 <div class="form-group">
-                    {!!  Form::label('text', 'Comment:') !!}
+                    {!! Form::label('text', 'Comment:') !!}
                     {!! Form::text('text') !!}
-                    {!! Form::button('Оставить отзыв', ['class' => 'btn-primary', 'type' => 'submit']) !!}
+                    {!! Form::submit('Оставить отзыв', ['class' => 'btn-primary']) !!}
                     {{ Form::close() }}
                 </div>
             </div>

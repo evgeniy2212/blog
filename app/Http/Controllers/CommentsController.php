@@ -15,7 +15,9 @@ class CommentsController extends Controller
     public function index()
     {
         //
-        return view('comments');
+        $comments = Comments::all();
+        return view('comments')->with(['comments' => $comments]);
+//        return view('comments');
     }
 
     /**
@@ -26,7 +28,6 @@ class CommentsController extends Controller
     public function create()
     {
         //
-//        return view('comments');
     }
 
     /**
@@ -38,14 +39,13 @@ class CommentsController extends Controller
     public function store(Request $request)
     {
         $data = $request->only('name', 'text');
-        $comment = new Comments();
-        $comment->fill($data);
-        if($comment->save()){
-            $message = 'Комментарий добавлен!';
-            return view('comments', ["message" => $message]);
-        }
-//        dd($data);
+        $comment = new Comments($data);
+        $comment -> save();
+        $comments = Comments::all();
 
+        return redirect()
+            ->route('comments')
+            ->with(['comments' => $comments]);
     }
 
     /**
@@ -57,6 +57,7 @@ class CommentsController extends Controller
     public function show($id)
     {
         //
+
     }
 
     /**
