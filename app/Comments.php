@@ -9,7 +9,7 @@ class Comments extends Model
     //
    protected $table = 'comments';
 
-   protected $fillable = ['text'];
+   protected $fillable = ['text', 'article_id', 'user_id'];
 
     public function user(){
         return $this->belongsTo('App\User');

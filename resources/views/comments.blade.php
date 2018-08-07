@@ -61,20 +61,33 @@
             </div>
         </div>
         @endforeach
+        <div class="col-xs-5 col-xs-offset-5" >
+            {{ $comments->links() }}
+        </div>
     </div>
     <div class="container">
         <div class="row">
+    @guest
+        <p>Для комментирования зарегистрируйтесь!</p>
+        @else
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                {{ Form::open(['action' => 'CommentsController@store', 'method' => 'POST', 'class' => 'form-horizontal', 'before'    => 'csrf']) }}
+                {{ Form::open(['route' => ['comment.store', 'article_id' => $article_id], 'method' => 'POST', 'class' => 'form-horizontal', 'before' => 'csrf']) }}
                 <div class="form-group">
-                    {!! Form::label('text', 'Comment:') !!}
-                    {!! Form::text('text') !!}
-                    {!! Form::submit('Оставить отзыв', ['class' => 'btn-primary']) !!}
+                    {{--{!! Form::label('text', 'Comment:') !!}--}}
+
+                    <div class="col-xs-offset-1">
+                        {!! Form::textarea('text') !!}
+                    </div>
+                    <div class="col-xs-offset-4">
+                        {!! Form::submit('Оставить отзыв', ['class' => 'btn-primary']) !!}
+                    </div>
                     {{ Form::close() }}
                 </div>
             </div>
         </div>
     </div>
+    @endguest
+
 </article>
 
 <hr>

@@ -17,9 +17,9 @@ class CreateArticlesTable extends Migration
             $table->increments('id');
             $table->string('title', 255);
             $table->text('text');
-            $table->integer('user_id');
+            $table->integer('user_id')->unsigned()->default(1);
 
-            $table->integer('user_id')->referenced('id')->on('user');
+            $table->foreign('user_id')->references('id')->on('users');
 
             $table->timestamps();
         });

@@ -16,6 +16,8 @@
 
     <!-- Theme CSS -->
     <link href="{{ asset('css/clean-blog.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    {{--<link href="{{ asset('css/app.css') }}" rel="stylesheet">--}}
 
     <!-- Custom Fonts -->
     <link href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
@@ -37,51 +39,14 @@
 
 <!-- Page Header -->
 <!-- Set your background image for this header on the line below. -->
-<header class="intro-header" style="background-image: url('{{ asset('img/home-bg.jpg') }}')">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <div class="site-heading">
-                    <h1>Clean Blog</h1>
-                    <hr class="small">
-                    <span class="subheading">A Clean Blog Theme by Start Bootstrap</span>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
+
+@section('header')
+    @include ('header')
+@show
 
 <!-- Main Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            @foreach($articles as $article)
-            <div class="post-preview">
-                <a href="{{ route('post', $article->id) }}">
-                    <h2 class="post-title">
-                       {{ $article->title }}
-                        {{ $article->id }}
-                    </h2>
-                    <h3 class="post-subtitle">
-                        {{ $article->desc }}
-                    </h3>
-                </a>
-                <p class="post-meta">Posted by {{ $article->author }} {{ $article->created_at }}</p>
-                <a href="{{ route('comments') }}"> Comments </a>
-            </div>
-                <hr>
-                @endforeach
-            {{ $articles->links() }}
-            <!-- Pager -->
-            {{--<ul class="pager">--}}
-                {{--<li class="next">--}}
 
-                    {{--<a href="#">Older Posts &rarr;</a>--}}
-                {{--</li>--}}
-            {{--</ul>--}}
-        </div>
-    </div>
-</div>
+@yield('content')
 
 <hr>
 

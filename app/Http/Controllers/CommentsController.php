@@ -12,12 +12,10 @@ class CommentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
-        //
-        $comments = Comments::all();
-        return view('comments')->with(['comments' => $comments]);
-//        return view('comments');
+        $comments = Comments::where('article_id', $id)->orderBy('id', 'DESC')->paginate(5);
+        return view('comments')->with(['comments' => $comments, 'article_id' => $id]);
     }
 
     /**
@@ -27,7 +25,7 @@ class CommentsController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -38,14 +36,11 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only('name', 'text');
+        $data = $request->only('text', 'article_id', 'user_id');
         $comment = new Comments($data);
         $comment -> save();
-        $comments = Comments::all();
-
-        return redirect()
-            ->route('comments')
-            ->with(['comments' => $comments]);
+        $id = $data['article_id'];
+        return redirect()->route('article.show', [$id]);
     }
 
     /**
@@ -91,6 +86,11 @@ class CommentsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = new Comments();
+        $comment = $comment->find($id);
+        $article = $comment->article()->get();
+        $comment->delete();
+
+        return redirect()->route('admin.show', $article[0]->id);
     }
 }

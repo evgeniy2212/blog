@@ -2,26 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Articles;
 use App\User;
-use Illuminate\Http\Request;
 use App\Comments;
 
-class ArticlesController extends Controller
+class AdminController extends Controller
 {
-    public function sort_date(Request $request){
-
-        $data = $request->all();
-
-        $date_sort = $data['date'];
-//        dd($date_sort);
-        $articles = new Articles();
-        $articles = $articles->orderBy('created_at', "$date_sort")->paginate(5);
-        return view('main_page',
-            [
-                'articles' => $articles,
-            ]);
-    }
     /**
      * Display a listing of the resource.
      *
@@ -31,7 +18,7 @@ class ArticlesController extends Controller
     {
         $articles = new Articles();
         $articles = $articles->orderBy('created_at', 'DESC')->paginate(5);
-        return view('main_page',
+        return view('admin.main_page',
             [
                 'articles' => $articles,
             ]);
@@ -44,24 +31,24 @@ class ArticlesController extends Controller
      */
     public function create()
     {
-        return view('add_article');
+        //
     }
 
     /**
      * Store a newly created resource in storage.
-     *w
+     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
+     *
+     * Store Comment for article
      */
     public function store(Request $request)
     {
-        $data = $request->only('text', 'title', 'user_id');
-        $article = new Articles($data);
-        $article->save();
-
-        $request->session()->flash('success', 'Article'."\"$article->title\"".'created');
-
-        return redirect()->route('main');
+        $data = $request->only('text', 'article_id');
+        $comment = new Comments($data);
+        $comment -> save();
+        $id = $data['article_id'];
+        return redirect()->route('admin.show', [$id]);
     }
 
     /**
@@ -75,10 +62,11 @@ class ArticlesController extends Controller
         $article = new Articles();
         $article = $article->find($id);
         $name = $article->user()->get();
-
         $comments = new Comments();
         $comments = $comments->where('article_id', $id)->orderBy('id', 'DESC')->get();
-        return view('post', [
+//        ->paginate(5)
+//        dd($comments);
+        return view('admin.post', [
             'article' => $article,
             'name' => $name[0]->name,
             'comments' => $comments,
@@ -105,17 +93,7 @@ class ArticlesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $data = $request->only('text', 'title');
 
-        $article =  Articles::find($id);
-        $article->text = $data['text'];
-        $article->title = $data['title'];
-        $article->id = $id;
-        $article->save();
-
-        $request->session()->flash('success', 'Article '."\"$article->title\"".' updated');
-
-        return redirect()->route('admin.show', $id);
     }
 
     /**
@@ -126,10 +104,6 @@ class ArticlesController extends Controller
      */
     public function destroy($id)
     {
-        $article = new Articles();
-        $article = $article->find($id);
-        $article->delete();
 
-        return redirect()->route('admin.index');
     }
 }

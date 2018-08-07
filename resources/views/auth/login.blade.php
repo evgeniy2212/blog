@@ -1,11 +1,11 @@
-@extends('layouts.app')
+@extends('layouts.main')
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-xs-6">
             <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+                {{--<div class="card-header">{{ __('Login') }}</div>--}}
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
@@ -63,6 +63,9 @@
                     </form>
                 </div>
             </div>
+        </div>
+        <div class="col-xs-6">
+            @include('auth.register')
         </div>
     </div>
 </div>

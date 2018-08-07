@@ -27,6 +27,7 @@ class AlterArticlesTable extends Migration
     {
         Schema::table('articles', function (Blueprint $table) {
             //
+//            $table->foreign('article_id')->references('id')->on('articles');
         });
     }
 }

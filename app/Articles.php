@@ -9,6 +9,8 @@ class Articles extends Model
 {
     protected $table = 'articles';
 
+    protected $fillable = ['text', 'title', 'user_id'];
+
     public function user(){
         return $this->belongsTo('App\User');
     }
@@ -17,14 +19,4 @@ class Articles extends Model
         return $this->hasMany('comments');
     }
 
-    public function getArticles(){
-        return DB::table('articles')
-            ->get();
-    }
-
-    public function getArticleById($id){
-        return DB::table('articles')
-                    ->where('id', $id)
-                    ->get();
-    }
 }
