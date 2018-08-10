@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Articles;
+use App\Article;
 use App\User;
 use Illuminate\Http\Request;
-use App\Comments;
+use App\Comment;
 
-class ArticlesController extends Controller
+class ArticleController extends Controller
 {
     public function sort_date(Request $request){
 
         $data = $request->all();
 
         $date_sort = $data['date'];
-//        dd($date_sort);
-        $articles = new Articles();
-        $articles = $articles->orderBy('created_at', "$date_sort")->paginate(5);
+        $articles = Article::orderBy('created_at', "$date_sort")->paginate(5);
         return view('main_page',
             [
                 'articles' => $articles,
@@ -29,8 +27,7 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $articles = new Articles();
-        $articles = $articles->orderBy('created_at', 'DESC')->paginate(5);
+        $articles =Article::orderBy('created_at', 'DESC')->paginate(5);
         return view('main_page',
             [
                 'articles' => $articles,
@@ -56,7 +53,7 @@ class ArticlesController extends Controller
     public function store(Request $request)
     {
         $data = $request->only('text', 'title', 'user_id');
-        $article = new Articles($data);
+        $article = new Article($data);
         $article->save();
 
         $request->session()->flash('success', 'Article'."\"$article->title\"".'created');
@@ -72,16 +69,11 @@ class ArticlesController extends Controller
      */
     public function show($id)
     {
-        $article = new Articles();
-        $article = $article->find($id);
-        $name = $article->user()->get();
-
-        $comments = new Comments();
-        $comments = $comments->where('article_id', $id)->orderBy('id', 'DESC')->get();
+        $article = Article::with('user', 'comments')->find($id);
+//        $comments = Comment::where('article_id', $id)->orderBy('created_at', 'DESC')->get();
         return view('post', [
             'article' => $article,
-            'name' => $name[0]->name,
-            'comments' => $comments,
+//            'comments' => $comments,
         ]);
     }
 
@@ -107,7 +99,7 @@ class ArticlesController extends Controller
     {
         $data = $request->only('text', 'title');
 
-        $article =  Articles::find($id);
+        $article =  Article::find($id);
         $article->text = $data['text'];
         $article->title = $data['title'];
         $article->id = $id;
@@ -126,8 +118,7 @@ class ArticlesController extends Controller
      */
     public function destroy($id)
     {
-        $article = new Articles();
-        $article = $article->find($id);
+        $article = Article::find($id);
         $article->delete();
 
         return redirect()->route('admin.index');

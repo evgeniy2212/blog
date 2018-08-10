@@ -3,7 +3,7 @@
     <div class="container">
         @include ('msg')
         <div class="row">
-            {{ Form::open(array('url'       => '/sort_date',
+            {{ Form::open(array('url'       => '/sort-date',
                                 'before'    => 'csrf',
                                 'method'    => 'post',
                                 ))

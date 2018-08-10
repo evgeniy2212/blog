@@ -16,8 +16,6 @@ class CheckAdmin
      */
     public function handle($request, Closure $next)
     {
-//        dd(Auth::user()->user_admin);
-//        if(Auth::user() && Auth::user()->user_admin)
         return $next($request);
     }
 }

@@ -29,10 +29,10 @@ class User extends Authenticatable
     ];
 
     public function comments(){
-        return $this->hasMany('App\Comments');
+        return $this->hasMany('App\Comment');
     }
 
     public function articles(){
-        return $this->hasMany('App\Articles');
+        return $this->hasMany('App\Article');
     }
 }

@@ -11,19 +11,16 @@
 |
 */
 
-Route::get('/', 'ArticlesController@index')->name('main')->middleware('check_admin');
-Route::get('add_article', 'ArticlesController@create');
-Route::post('edit_article', 'ArticlesController@store');
-//Route::post('article_update', 'ArticlesController@update');
-Route::resource('article', 'ArticlesController');
-Route::resource('admin', 'AdminController');
-Route::resource('comment', 'CommentsController');
+Route::get('/', 'ArticleController@index')->name('main');
 
-Route::post('sort_date', 'ArticlesController@sort_date');
+Route::resource('article', 'ArticleController');
+Route::resource('admin', 'AdminController');
+Route::resource('comment', 'CommentController');
+
+Route::post('sort-date', 'ArticleController@sort_date');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/comments/{id}', 'CommentsController@index')->name('comments');
-Route::post('storeComment', 'CommentsController@store');
+
 

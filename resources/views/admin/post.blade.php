@@ -9,7 +9,7 @@
                 <div class="col-xs-8 col-xs-offset-0">
                     <div class="post-heading">
                         <h1>{{ $article->title }}</h1>
-                        <span class="meta">Posted by {{ $name }} on {{ $article->created_at }}</span>
+                        <span class="meta">Posted by {{ $article->user->name }} on {{ $article->created_at }}</span>
                     </div>
                 </div>
             </div>
@@ -48,11 +48,11 @@
             </div>
             <div class="col-xs-4">
                 <h3>Comments:</h3>
-                    @foreach($comments as $comment)
+                    @foreach($article->comments as $comment)
                             <div class="row">
                                 <div class="col-xs-12 col-xs-offset-0">
                                     {{ $comment->text }}
-                                    <div class="comment-date">by {{ $comment->user()->get()->get(0)->name}} on {{ $comment->created_at }}</div>
+                                    <div class="comment-date">by {{ $comment->user->name}} on {{ $comment->created_at }}</div>
                                 </div>
                                 <div class="col-xs-4">
                                     {{ Form::open(['route' => ['comment.destroy', $comment->id], 'method' => 'DELETE', 'class' => 'form-horizontal', 'before' => 'csrf']) }}

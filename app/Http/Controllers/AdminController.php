@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Articles;
+use App\Article;
 use App\User;
-use App\Comments;
+use App\Comment;
 
 class AdminController extends Controller
 {
@@ -16,8 +16,7 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $articles = new Articles();
-        $articles = $articles->orderBy('created_at', 'DESC')->paginate(5);
+        $articles = Article::orderBy('created_at', 'DESC')->paginate(5);
         return view('admin.main_page',
             [
                 'articles' => $articles,
@@ -45,7 +44,7 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         $data = $request->only('text', 'article_id');
-        $comment = new Comments($data);
+        $comment = new Comment($data);
         $comment -> save();
         $id = $data['article_id'];
         return redirect()->route('admin.show', [$id]);
@@ -59,17 +58,11 @@ class AdminController extends Controller
      */
     public function show($id)
     {
-        $article = new Articles();
-        $article = $article->find($id);
-        $name = $article->user()->get();
-        $comments = new Comments();
-        $comments = $comments->where('article_id', $id)->orderBy('id', 'DESC')->get();
-//        ->paginate(5)
-//        dd($comments);
+        $article = Article::with('user', 'comments')->find($id);
+//        $comments = Comment::where('article_id', $id)->orderBy('id', 'DESC')->get();
         return view('admin.post', [
             'article' => $article,
-            'name' => $name[0]->name,
-            'comments' => $comments,
+//            'comments' => $comments,
         ]);
     }
 

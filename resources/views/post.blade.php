@@ -9,7 +9,7 @@
                 <div class="col-xs-8 col-xs-offset-0">
                     <div class="post-heading">
                         <h1>{{ $article->title }}</h1>
-                        <span class="meta">Posted by {{ $name }} on {{ $article->created_at }}</span>
+                        <span class="meta">Posted by {{ $article->user->name }} on {{ $article->created_at }}</span>
                     </div>
                 </div>
             </div>
@@ -31,16 +31,18 @@
                 {{--@foreach($digits as $digit)--}}
                     {{--{{ $digit[0]->name }}--}}
                 {{--@endforeach--}}
-                @foreach($comments as $comment)
+                @foreach($article->comments as $comment)
                     <div class="row">
                         <div class="col-xs-12 col-xs-offset-0">
                             {{ $comment->text }}
-                            <div class="comment-date">by {{ $comment->user()->get()->get(0)->name}} on {{ $comment->created_at }}</div>
+                            <div class="comment-date">by {{ $comment->user->name}} on {{ $comment->created_at }}</div>
                         </div>
                     </div>
                     <hr>
                 @endforeach
-                @auth
+                @guest
+                    <p>Чтобы оставить комментарий, <a href="{{ url('/login') }}">Войдите</a> или <a href="{{ url('/login') }}">Зарегистрируйтесь!</a>!</p>
+                @else
                 {{ Form::open(['route' => ['comment.store', 'article_id' => $article->id, 'user_id' => Auth::user()->id],  'method' => 'POST', 'class' => 'form-horizontal', 'before' => 'csrf']) }}
                 {{--{!! Form::label('text', 'Comment:') !!}--}}
                 {{--<div class="col-xs-offset-1">--}}
@@ -51,7 +53,7 @@
                 {!! Form::submit('Feedback', ['class' => 'btn btn-primary']) !!}
                 {{--</div>--}}
                 {{ Form::close() }}
-                @endauth
+                @endguest
             </div>
 
         </div>

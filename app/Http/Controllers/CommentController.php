@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Comments;
+use App\Comment;
 
-class CommentsController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,7 @@ class CommentsController extends Controller
      */
     public function index($id)
     {
-        $comments = Comments::where('article_id', $id)->orderBy('id', 'DESC')->paginate(5);
-        return view('comments')->with(['comments' => $comments, 'article_id' => $id]);
+
     }
 
     /**
@@ -37,7 +36,7 @@ class CommentsController extends Controller
     public function store(Request $request)
     {
         $data = $request->only('text', 'article_id', 'user_id');
-        $comment = new Comments($data);
+        $comment = new Comment($data);
         $comment -> save();
         $id = $data['article_id'];
         return redirect()->route('article.show', [$id]);
@@ -86,8 +85,7 @@ class CommentsController extends Controller
      */
     public function destroy($id)
     {
-        $comment = new Comments();
-        $comment = $comment->find($id);
+        $comment = Comment::find($id);
         $article = $comment->article()->get();
         $comment->delete();
 

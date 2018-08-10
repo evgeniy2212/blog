@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
-class Articles extends Model
+class Article extends Model
 {
     protected $table = 'articles';
 
@@ -16,7 +16,7 @@ class Articles extends Model
     }
 
     public function comments(){
-        return $this->hasMany('comments');
+        return $this->hasMany('App\Comment');
     }
 
 }

@@ -7,12 +7,12 @@
                 <span class="sr-only">Toggle navigation</span>
                 Menu <i class="fa fa-bars"></i>
             </button>
-            <a class="navbar-brand" href="{{ route('main') }}">Home</a>
+            <a class="navbar-brand" href="{{ route('article.index') }}">Home</a>
             {{--@auth<a class="navbar-brand" href="{{ url('add_article') }}">Add_Article</a>--}}
             {{--@endauth--}}
             @guest<a class="navbar-brand" href="{{ url('/login') }}">Login/Register</a>
                 @else
-                <a class="navbar-brand" href="{{ url('add_article') }}">Add_Article</a>
+                <a class="navbar-brand" href="{{ route('article.create') }}">Add_Article</a>
                 <a class="navbar-brand" href="{{ route('logout') }}"
                         onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
