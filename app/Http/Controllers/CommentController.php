@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Comment;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -35,11 +36,12 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->only('text', 'article_id', 'user_id');
-        $comment = new Comment($data);
-        $comment -> save();
-        $id = $data['article_id'];
-        return redirect()->route('article.show', [$id]);
+        $user = Auth::user();
+        $request->validated();
+        $data = $request->only('text', 'article_id');
+        $user->comments()->create($data);
+
+        return redirect()->route('article.show', $data['article_id']);
     }
 
     /**
@@ -83,9 +85,8 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Comment $comment)
     {
-        $comment = Comment::find($id);
         $article = $comment->article()->get();
         $comment->delete();
 

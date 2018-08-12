@@ -16,7 +16,7 @@
                                 {{ $article->desc }}
                             </h3>
                         </a>
-                        <p class="post-meta">Posted by {{ $article->user()->get()->get(0)->name }} {{ $article->created_at }}</p>
+                        <p class="post-meta">Posted by {{ $article->user->name }} {{ $article->created_at }}</p>
                     </div>
                     <hr>
                 </div>

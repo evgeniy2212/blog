@@ -2,23 +2,23 @@
 @section('content')
     <div class="container">
         @include ('msg')
-        <div class="row">
-            {{ Form::open(array('url'       => '/sort-date',
-                                'before'    => 'csrf',
-                                'method'    => 'post',
-                                ))
-            }}
-            <div class="form-group row">
-                <p>{{ Form::label('By publication date') }}</p>
-                <div class="col-xs-4">
-                    {{ Form::select('date', array('DESC' => 'New', 'ASC' => 'Older',), 'DESC', ['class' => 'form-control col-xs-4']) }}
-                </div>
-                <div class="col-xs-1">
-                    {{ Form::submit('Sort',array('class' => 'btn btn-success pull-right') ) }}
-                </div>
-            </div>
-            {{ Form::close() }}
-        </div>
+        {{--<div class="row">--}}
+            {{--{{ Form::open(array('url'       => '/sort-date',--}}
+                                {{--'before'    => 'csrf',--}}
+                                {{--'method'    => 'post',--}}
+                                {{--))--}}
+            {{--}}--}}
+            {{--<div class="form-group row">--}}
+                {{--<p>{{ Form::label('By publication date') }}</p>--}}
+                {{--<div class="col-xs-2">--}}
+                    {{--{{ Form::select('date', array('DESC' => 'New', 'ASC' => 'Older','Default' => 'Default'), 'Default', ['class' => 'form-control col-xs-2']) }}--}}
+                {{--</div>--}}
+                {{--<div class="col-xs-1">--}}
+                    {{--{{ Form::submit('Sort',array('class' => 'btn btn-success pull-right') ) }}--}}
+                {{--</div>--}}
+            {{--</div>--}}
+            {{--{{ Form::close() }}--}}
+        {{--</div>--}}
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
                 @foreach($articles as $article)
@@ -32,7 +32,7 @@
                                 {{ $article->desc }}
                             </h3>
                         </a>
-                        <p class="post-meta">Posted by {{ $article->user()->get()->get(0)->name }} {{ $article->created_at }}</p>
+                        <p class="post-meta">Posted by {{ $article->user->name }} {{ $article->created_at }}</p>
                         {{--<div class="col-xs-offset-1">--}}
                             {{--<a href="{{ route('comments', $article->id) }}"> Comments </a>--}}
                         {{--</div>--}}

@@ -6,6 +6,8 @@ use App\Article;
 use App\User;
 use Illuminate\Http\Request;
 use App\Comment;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ArticleRequest;
 
 class ArticleController extends Controller
 {
@@ -27,7 +29,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles =Article::orderBy('created_at', 'DESC')->paginate(5);
+        $articles = Article::orderBy('created_at', 'DESC')->paginate(5);
         return view('main_page',
             [
                 'articles' => $articles,
@@ -52,9 +54,9 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
         $data = $request->only('text', 'title', 'user_id');
-        $article = new Article($data);
-        $article->save();
+        $article = $user->articles()->create($data);
 
         $request->session()->flash('success', 'Article'."\"$article->title\"".'created');
 
@@ -70,10 +72,9 @@ class ArticleController extends Controller
     public function show($id)
     {
         $article = Article::with('user', 'comments')->find($id);
-//        $comments = Comment::where('article_id', $id)->orderBy('created_at', 'DESC')->get();
+
         return view('post', [
             'article' => $article,
-//            'comments' => $comments,
         ]);
     }
 
@@ -95,19 +96,13 @@ class ArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Article $article)
     {
         $data = $request->only('text', 'title');
-
-        $article =  Article::find($id);
-        $article->text = $data['text'];
-        $article->title = $data['title'];
-        $article->id = $id;
-        $article->save();
-
+        $article->update($data);
         $request->session()->flash('success', 'Article '."\"$article->title\"".' updated');
 
-        return redirect()->route('admin.show', $id);
+        return redirect()->route('admin.show', $article->id);
     }
 
     /**
@@ -116,9 +111,9 @@ class ArticleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Article $article)
     {
-        $article = Article::find($id);
+        $article->comments()->delete();
         $article->delete();
 
         return redirect()->route('admin.index');

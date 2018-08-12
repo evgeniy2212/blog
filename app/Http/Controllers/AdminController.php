@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Article;
 use App\User;
 use App\Comment;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -43,11 +44,11 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+        $user = Auth::user();
         $data = $request->only('text', 'article_id');
-        $comment = new Comment($data);
-        $comment -> save();
-        $id = $data['article_id'];
-        return redirect()->route('admin.show', [$id]);
+        $user->comments()->create($data);
+
+        return redirect()->route('admin.show', $data['article_id']);
     }
 
     /**
@@ -59,10 +60,9 @@ class AdminController extends Controller
     public function show($id)
     {
         $article = Article::with('user', 'comments')->find($id);
-//        $comments = Comment::where('article_id', $id)->orderBy('id', 'DESC')->get();
+
         return view('admin.post', [
             'article' => $article,
-//            'comments' => $comments,
         ]);
     }
 
